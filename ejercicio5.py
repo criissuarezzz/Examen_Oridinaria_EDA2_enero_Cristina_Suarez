@@ -54,11 +54,19 @@ class Grafo:
         for solucion in self.soluciones:
             print(solucion)
 
+    def encontrar_solucion(self):
+        self.backtrack(0)
+        if self.soluciones:
+            self.solucion = self.soluciones[0]
+            return True
+        return False
+    
+
 # Imprimir tabla con la posición de una sola bola Pokémon por cada valor de n
 print("{:<10s}{:<20s}".format("n", "Posición"))
 for n in range(1, 11):
     grafo = Grafo(n)
-    if grafo.encontrar_soluciones():
+    if grafo.encontrar_solucion():
         posicion = str(grafo.solucion)
     else:
         posicion = "No hay solución"
@@ -66,7 +74,7 @@ for n in range(1, 11):
 
 n = 15
 grafo = Grafo(n)
-if grafo.encontrar_soluciones():
+if grafo.encontrar_solucion():
     posicion = str(grafo.solucion)
 else:
     posicion = "No hay solución"
