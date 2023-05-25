@@ -138,3 +138,7 @@ print("Duración mínima del proyecto:", duracion_minima)
 print("Secuencia óptima de tareas:")
 for tarea in secuencia_optima:
     print(tarea[0], "->", tarea[1])
+
+
+
+#para realizar este ejercicio el algoritmo que he elegido es el de backtracking, ya que es el que mejor se adapta a este problema, pues se tratar de ir probando e ir hacia atras si se ve que no es la solución óptima.
