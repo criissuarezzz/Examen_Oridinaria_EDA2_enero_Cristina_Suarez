@@ -63,10 +63,14 @@ def imprimir_tabla():
             posicion = "No hay solución"
         print("{:<10d}{:<20s}".format(n, posicion))
 
+    n = 15
+    grafo = Grafo(n)
+    solucion = grafo.encontrar_solucion()
+    if solucion:
+        posicion = str(solucion)
+    else:
+        posicion = "No hay solución"
+    print("{:<10d}{:<20s}".format(n, posicion))
+
+
 imprimir_tabla()
-
-#para n=15
-
-grafo=Grafo(15)
-solucion=grafo.encontrar_solucion()
-print(solucion)
