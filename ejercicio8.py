@@ -140,3 +140,62 @@ dependencias = [
     ('J', 'M')
 ]
 
+class Arista:
+    def __init__(self, origen, destino, peso):
+        self.origen = origen
+        self.destino = destino
+        self.peso = peso
+
+class GrafoDirigidoPonderado:
+    def __init__(self):
+        self.nodos={}
+        self.aristas=[]
+
+    def agregar_nodo(self, nombre, duracion):
+        tarea = Tarea(nombre, duracion)
+        self.nodos[nombre] = tarea
+
+    def agregar_arista(self, origen, destino, peso):
+        arista = Arista(origen, destino, peso)
+        self.aristas.append(arista)
+
+    def obtener_tarea(self, nombre):
+        return self.nodos[nombre]
+
+    def obtener_duraciones(self):
+        duraciones = {}
+        for tarea in self.nodos.values():
+            duraciones[tarea] = tarea.duracion
+        return duraciones
+    
+# Creamos el grafo
+grafo = GrafoDirigidoPonderado()
+
+# Agregamos los nodos
+for tarea in tareas:
+    grafo.agregar_nodo(tarea.nombre, tarea.duracion)
+
+# Agregamos las aristas
+for dependencia in dependencias:
+    origen = dependencia[0]
+    destino = dependencia[1]
+    peso = grafo.obtener_tarea(destino).duracion
+    grafo.agregar_arista(origen, destino, peso)
+
+
+def forward_pass(grafo):
+    duraciones = grafo.obtener_duraciones()
+
+    # Inicializar los tiempos tempranos de todas las tareas en 0
+    tiempos_tempranos = {tarea: 0 for tarea in duraciones}
+
+    # Recorrer el grafo en orden topológico calculando los tiempos tempranos
+    for tarea in grafo.nodos.values():
+        for arista in grafo.aristas:
+            if arista.destino == tarea.nombre:
+                tiempo_temprano = tiempos_tempranos[arista.origen] + duraciones[arista.origen]
+                if tiempo_temprano > tiempos_tempranos[tarea]:
+                    tiempos_tempranos[tarea] = tiempo_temprano
+
+    return tiempos_tempranos
+
