@@ -1,15 +1,15 @@
-#para ver el problema de las n-pokeballs, primero hay que generar un grafo
-
 class Nodo:
     def __init__(self, fila):
         self.fila = fila
         self.siguiente = None
+
 
 class Grafo:
     def __init__(self, n):
         self.n = n
         self.nodos = [None] * n
         self.soluciones = []
+        self.solucion = []
 
     def agregar_nodo(self, fila):
         nodo = Nodo(fila)
