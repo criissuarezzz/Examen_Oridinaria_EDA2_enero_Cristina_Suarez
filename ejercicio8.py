@@ -52,14 +52,14 @@ class Grafo:
         nodo.tiempo_temprano = max_tiempo_temprano + nodo.duracion
         return nodo.tiempo_temprano
 
-    def backward_pass(self, nodo, tiempo_tardio_padre):
+    def backward_pass(self, nodo):
         if nodo.tiempo_tardio is not None:
             return nodo.tiempo_tardio
 
-        nodo.tiempo_tardio = tiempo_tardio_padre - nodo.duracion if tiempo_tardio_padre is not None else nodo.tiempo_temprano
+        nodo.tiempo_tardio = nodo.tiempo_temprano
 
         for sucesor in nodo.sucesores:
-            self.backward_pass(sucesor, nodo.tiempo_tardio)
+            self.backward_pass(sucesor)
 
     def encontrar_ruta_critica(self, nodo):
         ruta_critica = []
@@ -112,17 +112,15 @@ grafo.agregar_nodo('M', 25)
 
 # Establecer las dependencias entre tareas
 grafo.agregar_dependencia('A', 'B')
-grafo.agregar_dependencia('A', 'C')
-grafo.agregar_dependencia('A', 'D')
-grafo.agregar_dependencia('B', 'E')
-grafo.agregar_dependencia('B', 'F')
-grafo.agregar_dependencia('C', 'G')
-grafo.agregar_dependencia('D', 'G')
-grafo.agregar_dependencia('E', 'H')
-grafo.agregar_dependencia('F', 'H')
-grafo.agregar_dependencia('G', 'I')
-grafo.agregar_dependencia('H', 'J')
-grafo.agregar_dependencia('I', 'K')
+grafo.agregar_dependencia('B', 'C')
+grafo.agregar_dependencia('B', 'D')
+grafo.agregar_dependencia('C', 'E')
+grafo.agregar_dependencia('D', 'F')
+grafo.agregar_dependencia('E', 'G')
+grafo.agregar_dependencia('F', 'G')
+grafo.agregar_dependencia('G', 'H')
+grafo.agregar_dependencia('H', 'I')
+grafo.agregar_dependencia('I', 'J')
 grafo.agregar_dependencia('J', 'K')
 grafo.agregar_dependencia('K', 'L')
 grafo.agregar_dependencia('L', 'M')
