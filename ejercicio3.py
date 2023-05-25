@@ -1,4 +1,5 @@
 import time
+import csv
 class Pokemon():
     def __init__(self, nombre, tipo):
         self.nombre = nombre

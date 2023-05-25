@@ -24,11 +24,11 @@ class Pokemon():
         return "Pokemon: {} de tipo {}".format(self.nombre, self.tipo)
 
 def anadir_pokemon(nombre, tipo):
-    with open("pokemons.csv", "a") as archivo:
+    with open("pokemon.csv", "a") as archivo:
         archivo.write("{},{}\n".format(nombre, tipo))
 
 def leer_pokemons():
-    with open("pokemons.csv", "r") as archivo:
+    with open("pokemon.csv", "r") as archivo:
         pokemons = csv.reader(archivo)
         for pokemon in pokemons:
             print(pokemon)
