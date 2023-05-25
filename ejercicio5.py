@@ -25,7 +25,7 @@ class Grafo:
         while actual:
             if actual.fila == columna:
                 return False
-            if abs(actual.fila - columna) == abs(fila - 1):
+            if abs(actual.fila - columna) == abs(fila - actual.fila):
                 return False
             actual = actual.siguiente
         return True
@@ -53,7 +53,7 @@ class Grafo:
         return self.backtrack(0)
 
 def imprimir_tabla():
-    print("{:<10s}{:<20s}".format("n", "Posición"))
+    print("{}  {}".format("n", "Posición"))
     for n in range(1, 11):
         grafo = Grafo(n)
         solucion = grafo.encontrar_solucion()
@@ -61,7 +61,7 @@ def imprimir_tabla():
             posicion = str(solucion)
         else:
             posicion = "No hay solución"
-        print("{:<10d}{:<20s}".format(n, posicion))
+        print("{}  {}".format(n, posicion))
 
     n = 15
     grafo = Grafo(n)
@@ -70,7 +70,7 @@ def imprimir_tabla():
         posicion = str(solucion)
     else:
         posicion = "No hay solución"
-    print("{:<10d}{:<20s}".format(n, posicion))
+    print("{}  {}".format(n, posicion))
 
 
 imprimir_tabla()
