@@ -73,7 +73,7 @@ class Arbol:
     
 
 if __name__ == "__main__":
-    mensaje = "Hazte con todos pokemon"
+    mensaje = "Hazte,con,todos,pokemon"
 
     # Calcular las frecuencias del mensaje
     frecuencias = Arbol.calcular_frecuencias(mensaje)
