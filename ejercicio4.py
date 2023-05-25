@@ -318,5 +318,30 @@ def existe_paso(grafo, origen, destino):
 
 g = Grafo(False) 
 
-1=g.insertar_vertice(1)
-2=g.insertar_vertice(2)
+insertar_vertice(g, 0)
+insertar_vertice(g, 1)
+insertar_vertice(g, 2)
+insertar_vertice(g, 3)
+insertar_vertice(g, 4)
+insertar_vertice(g, 5)
+insertar_vertice(g, 6)
+insertar_vertice(g, 7)
+insertar_vertice(g, 8)
+insertar_vertice(g, 9)
+
+insertar_arista(g, 1, buscar_vertice(g, 1), buscar_vertice(g, 6))  # Teletransporte de Ruta 1 a Ruta 6
+insertar_arista(g, 1, buscar_vertice(g, 1), buscar_vertice(g, 8))  # Teletransporte de Ruta 1 a Ruta 8
+insertar_arista(g, 1, buscar_vertice(g, 2), buscar_vertice(g, 7))  # Teletransporte de Ruta 2 a Ruta 7
+insertar_arista(g, 1, buscar_vertice(g, 2), buscar_vertice(g, 9))  # Teletransporte de Ruta 2 a Ruta 9
+insertar_arista(g, 1, buscar_vertice(g, 3), buscar_vertice(g, 4))  # Teletransporte de Ruta 3 a Ruta 4
+insertar_arista(g, 1, buscar_vertice(g, 3), buscar_vertice(g, 8))  # Teletransporte de Ruta 3 a Ruta 8
+insertar_arista(g, 1, buscar_vertice(g, 4), buscar_vertice(g, 3))  # Teletransporte de Ruta 4 a Ruta 3
+insertar_arista(g, 1, buscar_vertice(g, 4), buscar_vertice(g, 9))  # Teletransporte de Ruta 4 a Ruta 9
+insertar_arista(g, 1, buscar_vertice(g, 4), buscar_vertice(g, 0))  # Teletransporte de Ruta 4 a Ruta 0
+insertar_arista(g, 1, buscar_vertice(g, 6), buscar_vertice(g, 1))  # Teletransporte de Ruta 6 a Ruta 1
+insertar_arista(g, 1, buscar_vertice(g, 6), buscar_vertice(g, 7))  # Teletransporte de Ruta 6 a Ruta 7
+insertar_arista(g, 1, buscar_vertice(g, 6), buscar_vertice(g, 0))  # Teletransporte de Ruta 6 a Ruta 0
+insertar_arista(g, 1, buscar_vertice(g, 7), buscar_vertice(g, 2))  # Teletransporte
+
+
+
