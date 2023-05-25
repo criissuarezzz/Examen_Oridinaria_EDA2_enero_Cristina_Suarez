@@ -101,180 +101,125 @@ Determinar la secuencia óptima de tareas. Recuerda que estos algoritmos son út
 ¿Cuál algoritmo elegirías en este caso y por qué? Desarrolla y describe el proceso que utilizarías para aplicar este algoritmo al conjunto de tareas.
 """
 
-class Tarea:
-    def __init__(self, nombre, duracion):
-        self.nombre = nombre
+class Nodo:
+    def __init__(self, tarea, duracion):
+        self.tarea = tarea
         self.duracion = duracion
+        self.tiempo_temprano = 0
+        self.tiempo_tardio = 0
+        self.sucesores = []
 
-    def __repr__(self):
-        return self.nombre
-    
-tareas = [
-    Tarea("A", 20),
-    Tarea("B", 5),
-    Tarea("C", 40),
-    Tarea("D", 10),
-    Tarea("E", 5),
-    Tarea("F", 10),
-    Tarea("G", 20),
-    Tarea("H", 25),
-    Tarea("I", 35),
-    Tarea("J", 25),
-    Tarea("K", 15),
-    Tarea("L", 5),
-    Tarea("M", 25),
-]
+    def agregar_sucesor(self, sucesor):
+        self.sucesores.append(sucesor)
 
-dependencias = [
-    ('A', 'D'),
-    ('A', 'E'),
-    ('D', 'F'),
-    ('E', 'F'),
-    ('B', 'G'),
-    ('G', 'H'),
-    ('C', 'H'),
-    ('H', 'J'),
-    ('F', 'J'),
-    ('I', 'J'),
-    ('K', 'L'),
-    ('J', 'M')
-]
+def calcular_ruta_critica(inicio):
+    # Realizar el Forward Pass
+    forward_pass(inicio)
 
-class Arista:
-    def __init__(self, origen, destino, peso):
-        self.origen = origen
-        self.destino = destino
-        self.peso = peso
+    # Realizar el Backward Pass
+    backward_pass(inicio)
 
-class GrafoDirigidoPonderado:
-    def __init__(self):
-        self.nodos={}
-        self.aristas=[]
+    # Identificar la ruta crítica
+    ruta_critica = encontrar_ruta_critica(inicio)
 
-    def agregar_nodo(self, nombre, duracion):
-        tarea = Tarea(nombre, duracion)
-        self.nodos[nombre] = tarea
+    # Calcular la duración mínima del proyecto
+    duracion_minima = calcular_duracion_minima(inicio)
 
-    def agregar_arista(self, origen, destino, peso):
-        arista = Arista(origen, destino, peso)
-        self.aristas.append(arista)
+    # Obtener la secuencia óptima de tareas
+    secuencia_optima = obtener_secuencia_optima(ruta_critica)
 
-    def obtener_tarea(self, nombre):
-        return self.nodos[nombre]
+    return ruta_critica, duracion_minima, secuencia_optima
 
-    def obtener_duraciones(self):
-        duraciones = {}
-        for tarea in self.nodos.values():
-            duraciones[tarea] = tarea.duracion
-        return duraciones
-    
-# Creamos el grafo
-grafo = GrafoDirigidoPonderado()
+def forward_pass(nodo):
+    if not nodo.sucesores:
+        return nodo.duracion
 
-# Agregamos los nodos
-for tarea in tareas:
-    grafo.agregar_nodo(tarea.nombre, tarea.duracion)
+    max_tiempo_temprano = 0
+    for sucesor in nodo.sucesores:
+        tiempo_temprano = forward_pass(sucesor)
+        max_tiempo_temprano = max(max_tiempo_temprano, tiempo_temprano)
 
-# Agregamos las aristas
-for dependencia in dependencias:
-    origen = dependencia[0]
-    destino = dependencia[1]
-    peso = grafo.obtener_tarea(destino).duracion
-    grafo.agregar_arista(origen, destino, peso)
+    nodo.tiempo_temprano = max_tiempo_temprano
+    return max_tiempo_temprano + nodo.duracion
 
+def backward_pass(nodo):
+    if not nodo.sucesores:
+        nodo.tiempo_tardio = nodo.tiempo_temprano
 
-def forward_pass(grafo):
-    duraciones = grafo.obtener_duraciones()
+    for sucesor in nodo.sucesores:
+        sucesor.tiempo_tardio = min(sucesor.tiempo_tardio or nodo.tiempo_tardio - sucesor.duracion, nodo.tiempo_tardio - sucesor.duracion)
+        backward_pass(sucesor)
 
-    # Inicializar los tiempos tempranos de todas las tareas en 0
-    tiempos_tempranos = {tarea: 0 for tarea in duraciones}
-
-    # Recorrer el grafo en orden topológico calculando los tiempos tempranos
-    for tarea in grafo.nodos.values():
-        for arista in grafo.aristas:
-            if arista.destino == tarea.nombre:
-                tiempo_temprano = tiempos_tempranos[arista.origen] + duraciones[arista.origen]
-                if tiempo_temprano > tiempos_tempranos[tarea]:
-                    tiempos_tempranos[tarea] = tiempo_temprano
-
-    return tiempos_tempranos
-
-
-def backward_pass(grafo, tiempos_tempranos):
-    duraciones = grafo.obtener_duraciones()
-
-    # Inicializar los tiempos tardíos de todas las tareas en el tiempo temprano de la última tarea
-    tiempos_tardios = {tarea: tiempos_tempranos[list(grafo.nodos.values())[-1]] for tarea in duraciones}
-
-    # Recorrer el grafo en orden topológico inverso calculando los tiempos tardíos
-    for tarea in reversed(list(grafo.nodos.values())):
-        for arista in grafo.aristas:
-            if arista.origen == tarea.nombre:
-                tiempo_tardio = tiempos_tardios[arista.destino] - duraciones[tarea]
-                if tiempo_tardio < tiempos_tardios[tarea]:
-                    tiempos_tardios[tarea] = tiempo_tardio
-
-    return tiempos_tardios
-
-
-def encontrar_ruta_critica(grafo,tiempos_tempranos, tiempos_tardios):
+def encontrar_ruta_critica(nodo):
     ruta_critica = []
+    if not nodo.sucesores:
+        return ruta_critica
 
-    for tarea in grafo.nodos.values():
-        tiempo_temprano = tiempos_tempranos[tarea]
-        tiempo_tardio = tiempos_tardios[tarea]
-
-        if tiempo_temprano == tiempo_tardio:
-            ruta_critica.append(tarea)
+    for sucesor in nodo.sucesores:
+        if sucesor.tiempo_temprano - sucesor.tiempo_tardio == 0:
+            ruta_critica.append((nodo.tarea, sucesor.tarea))
+        ruta_critica.extend(encontrar_ruta_critica(sucesor))
 
     return ruta_critica
 
-# Calcular la duración mínima del proyecto sumando las duraciones de las tareas en la ruta crítica
-def calcular_duracion_minima(ruta_critica):
+def calcular_duracion_minima(nodo):
+    if not nodo.sucesores:
+        return nodo.duracion
+
     duracion_minima = 0
-    for tarea in ruta_critica:
-        duracion_minima += tarea.duracion
+    for sucesor in nodo.sucesores:
+        duracion_minima = max(duracion_minima, calcular_duracion_minima(sucesor))
 
-    return duracion_minima
+    return duracion_minima + nodo.duracion
 
-# Obtener la secuencia óptima de tareas siguiendo el camino de la ruta crítica
 def obtener_secuencia_optima(ruta_critica):
     secuencia_optima = []
-
     for tarea in ruta_critica:
-        secuencia_optima.append(tarea)
+        if tarea[0] not in [t[1] for t in secuencia_optima]:
+            secuencia_optima.append(tarea)
 
     return secuencia_optima
 
+# Crear el grafo con los nodos correspondientes a cada tarea y sus duraciones
+A = Nodo('A', 20)
+B = Nodo('B', 5)
+C = Nodo('C', 40)
+D = Nodo('D', 10)
+E = Nodo('E', 5)
+F = Nodo('F', 10)
+G = Nodo('G', 20)
+H = Nodo('H', 25)
+I = Nodo('I', 35)
+J = Nodo('J', 25)
+K = Nodo('K', 15)
+L = Nodo('L', 5)
+M = Nodo('M', 25)
 
-# Realizar el Forward Pass y el Backward Pass
-tiempos_tempranos = forward_pass(grafo)
-tiempos_tardios = backward_pass(grafo, tiempos_tempranos)
+# Establecer las dependencias entre tareas
+A.agregar_sucesor(B)
+A.agregar_sucesor(C)
+A.agregar_sucesor(D)
+B.agregar_sucesor(E)
+B.agregar_sucesor(F)
+C.agregar_sucesor(H)
+D.agregar_sucesor(M)
+E.agregar_sucesor(G)
+F.agregar_sucesor(G)
+G.agregar_sucesor(I)
+G.agregar_sucesor(J)
+H.agregar_sucesor(K)
+I.agregar_sucesor(K)
+J.agregar_sucesor(L)
+K.agregar_sucesor(M)
 
-# Identificar la ruta crítica
-ruta_critica = encontrar_ruta_critica(grafo, tiempos_tempranos, tiempos_tardios)
+# Calcular la ruta crítica y obtener la secuencia óptima de tareas
+ruta_critica, duracion_minima, secuencia_optima = calcular_ruta_critica(A)
 
-# Calcular la duración mínima del proyecto
-duracion_minima = calcular_duracion_minima(ruta_critica)
-
-# Obtener la secuencia óptima de tareas
-secuencia_optima = obtener_secuencia_optima(ruta_critica)
-
-# Imprimir los resultados
-print("Tiempos Tempranos:")
-for tarea, tiempo in tiempos_tempranos.items():
-    print(f"{tarea}: {tiempo}")
-
-print("\nTiempos Tardíos:")
-for tarea, tiempo in tiempos_tardios.items():
-    print(f"{tarea}: {tiempo}")
-
-print("\nRuta Crítica:")
+# Imprimir resultados
+print("Ruta crítica:")
 for tarea in ruta_critica:
-    print(tarea)
-
-print("\nDuración Mínima del Proyecto:", duracion_minima)
-
-print("\nSecuencia Óptima de Tareas:")
+    print(tarea[0], "->", tarea[1])
+print("Duración mínima del proyecto:", duracion_minima)
+print("Secuencia óptima de tareas:")
 for tarea in secuencia_optima:
-    print(tarea)
+    print(tarea[0], "->", tarea[1])
