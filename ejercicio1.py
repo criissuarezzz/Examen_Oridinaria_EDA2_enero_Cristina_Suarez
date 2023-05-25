@@ -1,3 +1,5 @@
+import csv
+
 class Pokemon():
     def __init__(self, nombre, tipo):
         self.nombre = nombre
@@ -18,6 +20,28 @@ class Pokemon():
         elif self.tipo == "Velocidad" or self.tipo == "velocidad":
             return "Pokemon de tipo Velocidad"
         
+def anadir_pokemon(nombre, tipo):
+    with open("pokemon.csv", "a") as archivo:
+        archivo.write("{},{}\n".format(nombre, tipo))
+    print("Pokemon añadido con exito")
+
+def leer_pokemon():
+    with open("pokemon.csv", "r") as archivo:
+        lector = csv.reader(archivo)
+        for linea in lector:
+            print(linea)
+
+pokemon1 = Pokemon("Pikachu", "PS")
+anadir_pokemon(pokemon1.nombre, pokemon1.tipo)
+
+pokemon2 = Pokemon("Charmander", "Ataque")
+anadir_pokemon(pokemon2.nombre, pokemon2.tipo)
+
+pokemon3 = Pokemon("Squirtle", "Defensa")
+anadir_pokemon(pokemon3.nombre, pokemon3.tipo)
+
+pokemon4 = Pokemon("Bulbasaur", "Ataque Especial")
+anadir_pokemon(pokemon4.nombre, pokemon4.tipo)
 
 #experimentacion con unittest
 import unittest
