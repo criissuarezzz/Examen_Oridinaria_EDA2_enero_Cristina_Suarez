@@ -136,20 +136,41 @@ else:
 # Obtener los Pokemon de tipo Tierra para que custodien al Profesor Oak en una misión de exploración al Bosque Verdanturf 
 
 # Buscar los Pokémon de tipo Tierra en la tabla hash
-pokemones_tierra = []
+pokemon_tierra = []
 tipo_tierra = "Tie"
 
 actual = tabla_tipos.tabla[tabla_tipos._hash(tipo_tierra)]
 
 while actual is not None:
     if actual.valor.tipo == tipo_tierra:
-        pokemones_tierra.append(actual.valor)
+        pokemon_tierra.append(actual.valor)
     actual = actual.siguiente
 
 # Mostrar los Pokémon de tipo Tierra encontrados
-if len(pokemones_tierra) > 0:
+if len(pokemon_tierra) > 0:
     print("Los Pokémon de tipo Tierra que pueden custodiar al Profesor Oak en el Bosque Verdanturf son:")
-    for pokemon in pokemones_tierra:
+    for pokemon in pokemon_tierra:
         print(pokemon.nombre)
 else:
     print("No se encontraron Pokémon de tipo Tierra para custodiar al Profesor Oak en el Bosque Verdanturf.")
+
+
+#Buscar los de tipo Fuego
+
+pokemones_fuego = []
+tipo_fuego = "Fuego"
+
+actual = tabla_tipos.tabla[tabla_tipos._hash(tipo_fuego)]
+
+while actual is not None:
+    if actual.valor.tipo == tipo_fuego:
+        pokemones_fuego.append(actual.valor)
+    actual = actual.siguiente
+
+# Mostrar los Pokémon de tipo Fuego encontrados
+if len(pokemones_fuego) > 0:
+    print("Los Pokémon de tipo Fuego que pueden participar en la misión de exterminación en la Cueva Lava son:")
+    for pokemon in pokemones_fuego:
+        print(pokemon.nombre)
+else:
+    print("No se encontraron Pokémon de tipo Fuego para la misión de exterminación en la Cueva Lava.")
