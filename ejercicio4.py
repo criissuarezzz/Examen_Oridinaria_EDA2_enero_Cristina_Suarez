@@ -345,3 +345,43 @@ insertar_arista(g, 1, buscar_vertice(g, 7), buscar_vertice(g, 2))  # Teletranspo
 
 
 
+def contar_teletransportes_validos(g, ruta_inicial, teletransportes):
+    visitados = set()  # Conjunto de rutas visitadas
+    contador = 0  # Contador de teletransportes válidos
+
+    # Función auxiliar de búsqueda en profundidad (DFS)
+    def dfs(ruta, num_teletransportes):
+        nonlocal contador
+
+        visitados.add(ruta)  # Marcar la ruta actual como visitada
+
+        if num_teletransportes == 0:
+            contador += 1
+        else:
+            vecinos = adyacentes(g, ruta)
+            for vecino in vecinos:
+                if vecino not in visitados:
+                    dfs(vecino, num_teletransportes - 1)
+
+        visitados.remove(ruta)  # Desmarcar la ruta actual como visitada
+
+    dfs(ruta_inicial, teletransportes)
+    return contador
+
+
+# Insertar vértices y aristas según el grafo dado
+
+tabla = []
+for ruta_inicial in range(10):
+    fila = []
+    for teletransportes in range(1, 6):
+        contador = contar_teletransportes_validos(g, ruta_inicial, teletransportes)
+        fila.append(contador)
+    tabla.append(fila)
+
+# Imprimir la tabla
+for fila in tabla:
+    print(fila)
+
+
+
