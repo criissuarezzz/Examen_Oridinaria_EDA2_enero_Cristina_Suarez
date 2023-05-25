@@ -24,21 +24,34 @@ class Pokemon():
         return "Pokemon: {} de tipo {}".format(self.nombre, self.tipo)
         
 class Pokeball():
-    def __init__(self, peso, nombre, fecha_fabricacion):
+    def __init__(self, peso, nombrep, fecha_fabricacion):
         self.peso = peso
-        self.nombre = nombre
+        self.nombre = nombrep
         self.fecha_fabricacion = fecha_fabricacion
         print("Pokeball creada con exito")
 
     def __str__(self):
         return "Pokeball: {} de peso {} y fabricada el {}".format(self.nombre, self.peso, self.fecha_fabricacion)
 
+#añadir a csv al lado del pokemon del ejercicio 1
+def anadir_pokemon(nombre, tipo, peso, nombrep, fecha_fabricacion):
+    with open("pokemon.csv", "a") as archivo:
+        archivo.write("{},{}, {}, {}, {} \n".format(nombre, tipo, peso, nombrep, fecha_fabricacion))
+    print("Pokemon añadido con exito")
 
 #Crea algunas Pokeballs. Prueba a mostrar los datos de algunas Pokeballs ordenadas por su fecha de fabricación y a modificar algún valor, por ejemplo, prueba a modificar el precio de una de las Pokeballs.
 pokeball1 = Pokeball(0.5, "pokeball1", time.strftime("%d/%m/%y"))
+pokemon1 = Pokemon("Pikachu", "PS")
+anadir_pokemon(pokemon1.nombre, pokemon1.tipo, pokeball1.peso, pokeball1.nombre, pokeball1.fecha_fabricacion)
 pokeball2 = Pokeball(0.6, "pokeball2", time.strftime("%d/%m/%y"))
+pokemon2 = Pokemon("Charmander", "Ataque")
+anadir_pokemon(pokemon2.nombre, pokemon2.tipo, pokeball2.peso, pokeball2.nombre, pokeball2.fecha_fabricacion)
 pokeball3 = Pokeball(0.7, "pokeball3", time.strftime("%d/%m/%y"))
+pokemon3 = Pokemon("Squirtle", "Defensa")
+anadir_pokemon(pokemon3.nombre, pokemon3.tipo, pokeball3.peso, pokeball3.nombre, pokeball3.fecha_fabricacion)
 pokeball4 = Pokeball(0.8, "pokeball4", time.strftime("%d/%m/%y"))
+pokemon4 = Pokemon("Bulbasaur", "Ataque Especial")
+anadir_pokemon(pokemon4.nombre, pokemon4.tipo, pokeball4.peso, pokeball4.nombre, pokeball4.fecha_fabricacion)
 
 #ordenar por fecha de fabricacion
 pokeballs = [pokeball1, pokeball2, pokeball3, pokeball4]
