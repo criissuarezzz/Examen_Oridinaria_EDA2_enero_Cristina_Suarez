@@ -228,3 +228,53 @@ def encontrar_ruta_critica(grafo,tiempos_tempranos, tiempos_tardios):
             ruta_critica.append(tarea)
 
     return ruta_critica
+
+# Calcular la duración mínima del proyecto sumando las duraciones de las tareas en la ruta crítica
+def calcular_duracion_minima(ruta_critica):
+    duracion_minima = 0
+    for tarea in ruta_critica:
+        duracion_minima += tarea.duracion
+
+    return duracion_minima
+
+# Obtener la secuencia óptima de tareas siguiendo el camino de la ruta crítica
+def obtener_secuencia_optima(ruta_critica):
+    secuencia_optima = []
+
+    for tarea in ruta_critica:
+        secuencia_optima.append(tarea)
+
+    return secuencia_optima
+
+
+# Realizar el Forward Pass y el Backward Pass
+tiempos_tempranos = forward_pass(grafo)
+tiempos_tardios = backward_pass(grafo, tiempos_tempranos)
+
+# Identificar la ruta crítica
+ruta_critica = encontrar_ruta_critica(grafo, tiempos_tempranos, tiempos_tardios)
+
+# Calcular la duración mínima del proyecto
+duracion_minima = calcular_duracion_minima(ruta_critica)
+
+# Obtener la secuencia óptima de tareas
+secuencia_optima = obtener_secuencia_optima(ruta_critica)
+
+# Imprimir los resultados
+print("Tiempos Tempranos:")
+for tarea, tiempo in tiempos_tempranos.items():
+    print(f"{tarea}: {tiempo}")
+
+print("\nTiempos Tardíos:")
+for tarea, tiempo in tiempos_tardios.items():
+    print(f"{tarea}: {tiempo}")
+
+print("\nRuta Crítica:")
+for tarea in ruta_critica:
+    print(tarea)
+
+print("\nDuración Mínima del Proyecto:", duracion_minima)
+
+print("\nSecuencia Óptima de Tareas:")
+for tarea in secuencia_optima:
+    print(tarea)
