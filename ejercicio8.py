@@ -199,3 +199,32 @@ def forward_pass(grafo):
 
     return tiempos_tempranos
 
+
+def backward_pass(grafo, tiempos_tempranos):
+    duraciones = grafo.obtener_duraciones()
+
+    # Inicializar los tiempos tardíos de todas las tareas en el tiempo temprano de la última tarea
+    tiempos_tardios = {tarea: tiempos_tempranos[list(grafo.nodos.values())[-1]] for tarea in duraciones}
+
+    # Recorrer el grafo en orden topológico inverso calculando los tiempos tardíos
+    for tarea in reversed(list(grafo.nodos.values())):
+        for arista in grafo.aristas:
+            if arista.origen == tarea.nombre:
+                tiempo_tardio = tiempos_tardios[arista.destino] - duraciones[tarea]
+                if tiempo_tardio < tiempos_tardios[tarea]:
+                    tiempos_tardios[tarea] = tiempo_tardio
+
+    return tiempos_tardios
+
+
+def encontrar_ruta_critica(grafo,tiempos_tempranos, tiempos_tardios):
+    ruta_critica = []
+
+    for tarea in grafo.nodos.values():
+        tiempo_temprano = tiempos_tempranos[tarea]
+        tiempo_tardio = tiempos_tardios[tarea]
+
+        if tiempo_temprano == tiempo_tardio:
+            ruta_critica.append(tarea)
+
+    return ruta_critica
