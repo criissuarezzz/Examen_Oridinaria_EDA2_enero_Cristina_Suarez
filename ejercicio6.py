@@ -1,25 +1,27 @@
 import random
 
 class Pokemon:
-    def __init__(self, nombre, tipo):
+    def __init__(self, nombre, tipo, nivel):
         self.nombre = nombre
         self.tipo = tipo
-        print("Pokemon creado con exito")
-
+        self.nivel = nivel
 
 class Nodo:
     def __init__(self, clave, valor):
-        self. clave = clave
+        self.clave = clave
         self.valor = valor
         self.siguiente = None
 
 class TablaHash:
     def __init__(self):
-        self.tabla=[None]*1000
+        self.tabla = [None] * 800
 
-    def hash(self, clave):
-        return int(clave)%1000
-    
+    def _hash(self, clave):
+        if isinstance(clave, str):
+            return sum(ord(c) for c in clave) % 1000
+        else:
+            return int(clave) % 1000
+
     def insertar(self, clave, valor):
         indice = self._hash(clave)
         nodo = Nodo(clave, valor)
@@ -59,35 +61,33 @@ class TablaHash:
             actual = actual.siguiente
 
         return False
-    
 
-pokemon=[]
-tipos= ["Agua", "Fuego", "Tierra", "Electrico", "Normal", "Fantasma"]
-for i in range(800):
-    nombre = "Pokemon" + str(i + 1)
+# Generar los 800 Pokémon
+pokemones = []
+tipos = ["Agua", "Fuego", "Tierra", "Eléctrico", "Normal", "Fantasma"]
+
+for _ in range(800):
+    nombre = "Pokemon" + str(_ + 1)
     tipo = random.choice(tipos)
     nivel = random.randint(1, 100)
 
     pokemon = Pokemon(nombre, tipo, nivel)
-    pokemon.append(pokemon)
+    pokemones.append(pokemon)
 
-print("Se han creado 800 pokemones con exito")
+print("Se generaron 800 Pokémon.")
 
-
-
-
+# Cargar los Pokémon en las tablas hash
 tabla_niveles = TablaHash()
 tabla_tipos = TablaHash()
 
-for pokemon in pokemon:
+for pokemon in pokemones:
     ultimos_digitos = str(pokemon.nivel)[-3:]
     tabla_niveles.insertar(ultimos_digitos, pokemon)
 
     iniciales_tipo = pokemon.tipo[:3]
     tabla_tipos.insertar(iniciales_tipo, pokemon)
 
-print("Se han añadido los pokemones a las tablas hash con exito")
-
+print("Se cargaron los Pokémon en las tablas hash.")
 
 # Determinar si el Pokémon Fantasma de nivel 187 está cargado y eliminarlo
 pokemon_desertor = tabla_tipos.buscar("Fan")
@@ -131,3 +131,25 @@ if pokemones_exploracion:
         print(f"Nombre: {pokemon.nombre}, Tipo: {pokemon.tipo}, Nivel: {pokemon.nivel}")
 else:
     print("No se encontraron Pokémon terminados en 37.")
+
+
+# Obtener los Pokemon de tipo Tierra para que custodien al Profesor Oak en una misión de exploración al Bosque Verdanturf 
+
+# Buscar los Pokémon de tipo Tierra en la tabla hash
+pokemones_tierra = []
+tipo_tierra = "Tie"
+
+actual = tabla_tipos.tabla[tabla_tipos._hash(tipo_tierra)]
+
+while actual is not None:
+    if actual.valor.tipo == tipo_tierra:
+        pokemones_tierra.append(actual.valor)
+    actual = actual.siguiente
+
+# Mostrar los Pokémon de tipo Tierra encontrados
+if len(pokemones_tierra) > 0:
+    print("Los Pokémon de tipo Tierra que pueden custodiar al Profesor Oak en el Bosque Verdanturf son:")
+    for pokemon in pokemones_tierra:
+        print(pokemon.nombre)
+else:
+    print("No se encontraron Pokémon de tipo Tierra para custodiar al Profesor Oak en el Bosque Verdanturf.")
